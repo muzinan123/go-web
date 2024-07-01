@@ -1,5 +1,3 @@
-# go-web
-
 # Web Development Project
 
 This repository demonstrates a web development project developed in Go using Beego, Gin, MongoDB and MySQL.
