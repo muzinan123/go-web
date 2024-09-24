@@ -22,31 +22,30 @@ var tpl = `<html>
 </head>
 <body>
 <form action="/login" method="post">
-	用户名:<input type="text" name="username">
-	密码:<input type="password" name="password">
-	<input type="submit" value="登录">
+	username:<input type="text" name="username">
+	password:<input type="password" name="password">
+	<input type="submit" value="login">
 </form>
 </body>
 </html>`
 
 func loginMemory(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("method:", r.Method) //获取请求的方法
+	fmt.Println("method:", r.Method)
 	if r.Method == "GET" {
 		var t *template.Template
-		t = template.New("Products") //创建一个模板
+		t = template.New("Products")
 		t, _ = t.Parse(tpl)
 		log.Println(t.Execute(w, nil))
 	} else {
-		//请求的是登录数据，那么执行登录的逻辑判断
 		_ = r.ParseForm()
 		fmt.Println("username:", r.Form["username"])
 		fmt.Println("password:", r.Form["password"])
 		user1 := User{1, r.Form.Get("username"), r.Form.Get("password")}
 		store(user1)
-		if pwd := r.Form.Get("password"); pwd == "123456" { // 验证密码是否正确
-			fmt.Fprintf(w, "欢迎登陆，Hello %s!", r.Form.Get("username")) //这个写入到w的是输出到客户端的
+		if pwd := r.Form.Get("password"); pwd == "123456" {
+			fmt.Fprintf(w, "Hello %s!", r.Form.Get("username"))
 		} else {
-			fmt.Fprintf(w, "密码错误，请重新输入!")
+			fmt.Fprintf(w, "xxxxx!")
 		}
 	}
 }
@@ -61,15 +60,15 @@ func userInfo(w http.ResponseWriter, r *http.Request) {
 
 	for _, user := range UserByName[r.Form.Get("username")] {
 		fmt.Println(user)
-		fmt.Fprintf(w," %v",user ) //这个写入到w的是输出到客户端的
+		fmt.Fprintf(w, " %v", user)
 	}
 }
 
 func main() {
 
-	http.HandleFunc("/login", loginMemory)   //设置访问的路由
-	http.HandleFunc("/info", userInfo)       //设置访问的路由
-	err := http.ListenAndServe(":8080", nil) //设置监听的端口
+	http.HandleFunc("/login", loginMemory)
+	http.HandleFunc("/info", userInfo)
+	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}

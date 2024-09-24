@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func getApi(c *gin.Context) {
@@ -28,7 +29,6 @@ func postjson(c *gin.Context) {
 
 }
 
-//全局中间件 允许跨域
 func GlobalMiddleware(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.Header("Access-Control-Allow-Headers", "Content-Type,AccessToken,X-CSRF-Token, Authorization, Token")
@@ -40,7 +40,7 @@ func GlobalMiddleware(c *gin.Context) {
 func AuthMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("Authorization")
-		authorized := check(token) //调用认证方法
+		authorized := check(token)
 		if authorized {
 			c.Next()
 			return
@@ -77,9 +77,9 @@ func main() {
 		message := name + " is " + action
 		c.String(http.StatusOK, message)
 	})
-	r.GET("/getApi", getApi)      //注册接口
-	r.POST("/postApi", postApi)   //注册接口
-	r.POST("/postjson", postjson) //注册接口
+	r.GET("/getApi", getApi)
+	r.POST("/postApi", postApi)
+	r.POST("/postjson", postjson)
 	//r.Use(GlobalMiddleware)
 	_ = r.Run(":8000")
 }
